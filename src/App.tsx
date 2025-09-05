@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Homepage from './components/Homepage';
 import LandingPage from './components/LandingPage';
 import PatientForm from './components/PatientForm';
 import AnalysisResults from './components/AnalysisResults';
@@ -6,12 +7,16 @@ import ClinicalReport from './components/ClinicalReport';
 import { PatientData, AnalysisResult } from './types';
 import { analyzeXray } from './utils/aiModel';
 
-type AppStep = 'landing' | 'form' | 'analysis' | 'report';
+type AppStep = 'homepage' | 'landing' | 'form' | 'analysis' | 'report';
 
 function App() {
-  const [currentStep, setCurrentStep] = useState<AppStep>('landing');
+  const [currentStep, setCurrentStep] = useState<AppStep>('homepage');
   const [patientData, setPatientData] = useState<PatientData | null>(null);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+
+  const handleEnterApp = () => {
+    setCurrentStep('landing');
+  };
 
   const handleGetStarted = () => {
     setCurrentStep('form');
@@ -36,13 +41,17 @@ function App() {
   };
 
   const handleNewAnalysis = () => {
-    setCurrentStep('form');
+    setCurrentStep('landing');
     setPatientData(null);
     setAnalysisResult(null);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {currentStep === 'homepage' && (
+        <Homepage onEnterApp={handleEnterApp} />
+      )}
+      
       {currentStep === 'landing' && (
         <LandingPage onGetStarted={handleGetStarted} />
       )}
